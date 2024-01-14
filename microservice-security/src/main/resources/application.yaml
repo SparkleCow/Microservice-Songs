@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cowradio
+    username: postgres
+    password: Borman15
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+SECRET_KEY: "6ed1eb0150e8f8fb285ec976ce500807406933985fbea5086c690eb221e53f5a"
