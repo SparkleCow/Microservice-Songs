@@ -1,5 +1,7 @@
 package cowradio.microservicesongs.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import cowradio.microservicesongs.entities.artist.Artist;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,7 +21,8 @@ public class Album {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
     @JoinColumn(name = "artist_id")
     private Artist artist;
     @Column(name = "album_name")

@@ -1,0 +1,1 @@
+Generar error de album repetido solo si un artista ya tiene dicho album en su lista de albumes

@@ -44,5 +44,7 @@ public enum Genre {
     URBAN,
     VAPORWAVE,
     WORLD,
-    YODEL
+    YODEL,
+    SHOEGAZE,
+    DREAMPOP
 }
