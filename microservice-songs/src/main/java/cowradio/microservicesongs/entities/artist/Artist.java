@@ -1,7 +1,7 @@
 package cowradio.microservicesongs.entities.artist;
 
-import cowradio.microservicesongs.entities.Album;
 import cowradio.microservicesongs.entities.Genre;
+import cowradio.microservicesongs.entities.albums.Album;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.ArrayList;

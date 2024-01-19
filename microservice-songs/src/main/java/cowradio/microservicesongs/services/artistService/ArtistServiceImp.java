@@ -32,7 +32,7 @@ public class ArtistServiceImp implements ArtistService {
 
     @Override
     public List<Artist> findByArtistName(String artistName) {
-        return artistRepository.findByArtistName(artistName);
+        return artistRepository.findByName(artistName);
     }
 
     @Override

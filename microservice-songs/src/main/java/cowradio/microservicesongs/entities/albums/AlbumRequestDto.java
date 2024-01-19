@@ -1,4 +1,4 @@
-package cowradio.microservicesongs.entities.dtos;
+package cowradio.microservicesongs.entities.albums;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -6,8 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 
 public record AlbumRequestDto(
-        @NotNull Long artistId,
-        @NotBlank Date date,
+        @NotNull String artistName,
+        @NotNull Date date,
         @NotBlank String albumName,
         @NotBlank String albumUrlImg
 ) {

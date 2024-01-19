@@ -19,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/artist")
 public class ArtistController {
+
     private final ArtistService artistService;
 
     @PostMapping
@@ -33,8 +34,7 @@ public class ArtistController {
     @PutMapping("/{id}")
     public ResponseEntity<Artist> updateArtist(@RequestBody ArtistUpdateDto artistUpdateDto,
                                                @PathVariable Long id) throws NoResultException {
-        Artist artist = artistService.updateArtist(artistUpdateDto, id);
-        return ResponseEntity.ok(artist);
+        return ResponseEntity.ok(artistService.updateArtist(artistUpdateDto, id));
     }
 
     @GetMapping("/{id}")

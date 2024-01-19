@@ -12,6 +12,12 @@
 
   <packaging>pom</packaging>
 
+  <modules>
+    <module>microservice-gateway</module>
+    <module>microservice-security</module>
+    <module>microservice-songs</module>
+  </modules>
+
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>

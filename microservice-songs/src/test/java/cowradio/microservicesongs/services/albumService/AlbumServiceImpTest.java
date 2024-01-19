@@ -1,8 +1,8 @@
 package cowradio.microservicesongs.services.albumService;
 
-import cowradio.microservicesongs.entities.Album;
+import cowradio.microservicesongs.entities.albums.Album;
 import cowradio.microservicesongs.entities.artist.Artist;
-import cowradio.microservicesongs.entities.dtos.AlbumRequestDto;
+import cowradio.microservicesongs.entities.albums.AlbumRequestDto;
 import cowradio.microservicesongs.repositories.AlbumRepository;
 import cowradio.microservicesongs.repositories.ArtistRepository;
 import org.junit.jupiter.api.Assertions;

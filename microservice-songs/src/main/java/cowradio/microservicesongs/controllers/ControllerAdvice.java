@@ -1,5 +1,6 @@
 package cowradio.microservicesongs.controllers;
 
+import cowradio.microservicesongs.exceptions.DuplicateAlbumException;
 import cowradio.microservicesongs.exceptions.ErrorMessage;
 import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,14 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorMessage> exceptionHandler(MethodArgumentNotValidException methodArgumentNotValidException){
+    public ResponseEntity<ErrorMessage> MethodArgumentNotValidExceptionHandler(MethodArgumentNotValidException methodArgumentNotValidException){
         ErrorMessage errorMessage = new ErrorMessage("Error 400 Bad request", methodArgumentNotValidException.getMessage());
+        return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = DuplicateAlbumException.class)
+    public ResponseEntity<ErrorMessage> duplicateAlbumExceptionHandler(DuplicateAlbumException duplicateAlbumException) {
+        ErrorMessage errorMessage = new ErrorMessage("Error 400 Bad request", duplicateAlbumException.getMessage());
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
     }
 
