@@ -44,7 +44,7 @@ class AlbumServiceImpTest {
         Album newAlbum = new Album(1L, artist, "AlbumName", new Date(), "https://example.com/image.jpg", List.of());
 
         // Mocks
-        Mockito.when(artistRepository.findById(albumDto.artistId())).thenReturn(Optional.of(artist));
+        //Mockito.when(artistRepository.findById(albumDto.artistName()).thenReturn(Optional.of(artist));
         Mockito.when(albumRepository.save(any(Album.class))).thenReturn(newAlbum);
 
         // When

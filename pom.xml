@@ -16,6 +16,8 @@
     <module>microservice-gateway</module>
     <module>microservice-security</module>
     <module>microservice-songs</module>
+    <module>microservice-eureka</module>
+    <module>microservice-config</module>
   </modules>
 
   <parent>

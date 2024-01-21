@@ -1,4 +1,11 @@
+server:
+  port: 9090
+
 spring:
+  config:
+    import: optional:configserver:http://localhost:8888
+  application:
+    name: msvc-auth
   datasource:
     url: jdbc:postgresql://localhost:5432/cowradio
     username: postgres
@@ -12,3 +19,15 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 SECRET_KEY: "6ed1eb0150e8f8fb285ec976ce500807406933985fbea5086c690eb221e53f5a"
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+

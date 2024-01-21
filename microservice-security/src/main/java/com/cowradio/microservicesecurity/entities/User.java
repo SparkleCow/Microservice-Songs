@@ -7,9 +7,8 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -32,7 +31,13 @@ public class User implements UserDetails {
     private Set<Role> roles = new HashSet<>();
     @OneToMany
     @JoinColumn(name = "playlists")
-    private Set<Playlist> playlists = new HashSet<>();
+    private List<Playlist> playlists = new ArrayList<>();
+
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

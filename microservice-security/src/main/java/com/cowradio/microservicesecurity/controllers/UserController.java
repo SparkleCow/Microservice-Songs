@@ -2,6 +2,8 @@ package com.cowradio.microservicesecurity.controllers;
 
 import com.cowradio.microservicesecurity.config.jwt.JwtUtils;
 import com.cowradio.microservicesecurity.entities.User;
+import com.cowradio.microservicesecurity.entities.dtos.AuthResponse;
+import com.cowradio.microservicesecurity.entities.dtos.TokenDto;
 import com.cowradio.microservicesecurity.entities.dtos.UserLoginDto;
 import com.cowradio.microservicesecurity.entities.dtos.UserRegisterDto;
 import com.cowradio.microservicesecurity.services.UserService;
@@ -24,27 +26,25 @@ public class UserController {
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
 
-    @PostMapping("")
-    public ResponseEntity createUser(@RequestBody UserRegisterDto userRegisterDto){
+    @PostMapping("/register")
+    public ResponseEntity<Void> createUser(@RequestBody UserRegisterDto userRegisterDto){
         User user = userService.createUser(userRegisterDto);
         URI location = URI.create("/api/v1/user/" + user.getId());
         return ResponseEntity.created(location).build();
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody UserLoginDto userLoginDto){
-        UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(userLoginDto.username(),
-                userLoginDto.password());
-        authenticationManager.authenticate(user);
-        UserDetails userDetails = userService.findByUsername(userLoginDto.username());
-        System.out.println(userDetails.toString());
-        System.out.println(jwtUtils.createToken(userDetails));
-        return ResponseEntity.ok(jwtUtils.createToken(userDetails));
+    public ResponseEntity<AuthResponse> loginUser(@RequestBody UserLoginDto userLoginDto){
+        return ResponseEntity.ok(userService.login(userLoginDto.username(), userLoginDto.password()));
     }
 
-    @GetMapping("/")
-    public ResponseEntity<List<User>> findAllUsers(){
-        return ResponseEntity.ok(userService.findAllUser());
+    @PostMapping("/validate")
+    public ResponseEntity<TokenDto> validateToken(@RequestParam String token){
+        TokenDto tokenDto = userService.validateToken(token);
+        if(tokenDto == null || tokenDto.getToken().isEmpty()){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(tokenDto);
     }
 
 }

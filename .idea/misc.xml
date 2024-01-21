@@ -9,6 +9,8 @@
         <option value="$PROJECT_DIR$/microservice-songs/pom.xml" />
         <option value="$PROJECT_DIR$/microservice-gateway/microservice-gateway/pom.xml" />
         <option value="$PROJECT_DIR$/microservice-gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/microservice-eureka/pom.xml" />
+        <option value="$PROJECT_DIR$/microservice-config/pom.xml" />
       </list>
     </option>
   </component>

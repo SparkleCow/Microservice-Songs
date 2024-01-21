@@ -27,10 +27,10 @@ public class JwtUtils {
 
     public String createToken(UserDetails userDetails){
         HashMap<String, Object> extraClaims = new HashMap<>();
-        return generateToken(extraClaims, userDetails);
+        return createToken(extraClaims, userDetails);
     }
 
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails){
+    public String createToken(Map<String, Object> extraClaims, UserDetails userDetails){
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
