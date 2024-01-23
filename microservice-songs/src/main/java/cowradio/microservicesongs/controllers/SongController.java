@@ -1,6 +1,7 @@
 package cowradio.microservicesongs.controllers;
 
 import cowradio.microservicesongs.entities.songs.Song;
+import cowradio.microservicesongs.entities.songs.SongFeignDto;
 import cowradio.microservicesongs.entities.songs.SongRequestDto;
 import cowradio.microservicesongs.entities.songs.SongUpdateDto;
 import cowradio.microservicesongs.exceptions.DuplicateAlbumException;
@@ -37,6 +38,11 @@ public class SongController {
     @GetMapping("/{id}")
     public ResponseEntity<Song> findSongById(@PathVariable Long id) throws NoResultException{
         return ResponseEntity.ok(songService.findById(id));
+    }
+
+    @GetMapping("/feign/{id}")
+    public SongFeignDto findSongFeignById(@PathVariable Long id) throws NoResultException{
+        return songService.findByIdFeign(id);
     }
     @GetMapping("/bySongName")
     public ResponseEntity<List<Song>> findBySongName(@RequestParam String name){

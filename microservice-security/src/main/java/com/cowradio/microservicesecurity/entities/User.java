@@ -29,9 +29,8 @@ public class User implements UserDetails {
     private String password;
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
-    @OneToMany
-    @JoinColumn(name = "playlists")
-    private List<Playlist> playlists = new ArrayList<>();
+    @ElementCollection
+    private List<String> playlists = new ArrayList<>();
 
     public User(String username, String email, String password) {
         this.username = username;

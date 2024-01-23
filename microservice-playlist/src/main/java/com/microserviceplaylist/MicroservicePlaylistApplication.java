@@ -1,15 +1,15 @@
-package com.cowradio.microservicesecurity;
+package com.microserviceplaylist;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
-@EnableDiscoveryClient
 @EnableFeignClients
-public class MicroserviceSecurityApplication {
+public class MicroservicePlaylistApplication {
+
 	public static void main(String[] args) {
-		SpringApplication.run(MicroserviceSecurityApplication.class, args);
+		SpringApplication.run(MicroservicePlaylistApplication.class, args);
 	}
+
 }

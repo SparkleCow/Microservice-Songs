@@ -3,6 +3,7 @@ package cowradio.microservicesongs.services.songService;
 import cowradio.microservicesongs.entities.albums.Album;
 import cowradio.microservicesongs.entities.artist.Artist;
 import cowradio.microservicesongs.entities.songs.Song;
+import cowradio.microservicesongs.entities.songs.SongFeignDto;
 import cowradio.microservicesongs.entities.songs.SongRequestDto;
 import cowradio.microservicesongs.entities.songs.SongUpdateDto;
 import cowradio.microservicesongs.exceptions.SaveFailureException;
@@ -45,6 +46,16 @@ public class SongServiceImp implements SongService {
     @Override
     public Song findById(Long id) {
         return songRepository.findById(id).orElseThrow(() -> new NoResultException("Song not found with id: "+id));
+    }
+
+    @Override
+    public SongFeignDto findByIdFeign(Long id) {
+        Song song = songRepository.findById(id).orElseThrow(() -> new NoResultException("Song not found with id: "+id));
+        return new SongFeignDto(song.getId(),
+                song.getSongName(),
+                song.getArtistName(),
+                song.getViews(),
+                song.getAlbum().getAlbumUrlImg());
     }
 
     @Override
