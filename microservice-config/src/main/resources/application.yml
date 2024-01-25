@@ -1,1 +1,15 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: msvc-config
+  cloud:
+    config:
+      server:
+        git:
+          default-label: config-server
+          uri: https://github.com/SparkleCow/Microservice-Songs.git
+          search-paths: config-data
+
 
