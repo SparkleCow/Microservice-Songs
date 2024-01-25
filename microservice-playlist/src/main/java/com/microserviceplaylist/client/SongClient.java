@@ -12,5 +12,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface SongClient{
 
     @GetMapping("/feign/{id}")
-    public SongFeignDto findSongFeignById(@PathVariable Long id) throws NoResultException;
+    SongFeignDto findSongFeignById(@PathVariable Long id) throws NoResultException;
 }

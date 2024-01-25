@@ -16,4 +16,5 @@ public interface PlaylistService {
     List<Playlist> findByUsername(String username);
     Playlist updatePlaylist(Playlist playlist);
     void deletePlaylist(String id);
+    List<String> findAllPlaylistByUsername(String username);
 }

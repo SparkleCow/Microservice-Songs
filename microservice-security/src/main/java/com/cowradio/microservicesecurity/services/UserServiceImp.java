@@ -1,5 +1,6 @@
 package com.cowradio.microservicesecurity.services;
 
+import com.cowradio.microservicesecurity.client.PlaylistClient;
 import com.cowradio.microservicesecurity.config.jwt.JwtUtils;
 import com.cowradio.microservicesecurity.entities.Role;
 import com.cowradio.microservicesecurity.entities.User;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -25,6 +27,7 @@ public class UserServiceImp implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
+    private final PlaylistClient playlistClient;
 
     @Override
     public User createUser(UserRegisterDto userRegisterDto) {
@@ -39,7 +42,9 @@ public class UserServiceImp implements UserService {
         authenticationManager.authenticate(userAuth);
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found: "+username));
-        return new AuthResponse(jwtUtils.createToken(user), user.getPlaylists());
+        List<String> playlist = playlistClient.findAllPlaylistByUsername(username);
+        System.out.print(Arrays.toString(playlist.toArray()));
+        return new AuthResponse(jwtUtils.createToken(user), playlist);
     }
 
     @Override

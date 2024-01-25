@@ -89,4 +89,9 @@ public class PlaylistServiceImp implements PlaylistService{
     public void deletePlaylist(String id) {
 
     }
+
+    @Override
+    public List<String> findAllPlaylistByUsername(String username) {
+        return playlistRepository.findByUsername(username).stream().map(Playlist::getName).toList();
+    }
 }

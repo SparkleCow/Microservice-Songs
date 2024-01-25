@@ -33,6 +33,8 @@ public class PlaylistController {
         return ResponseEntity.ok(playlistService.findAll());
     }
 
-    @GetMapping("/byUsername")
-    public List<String>
+    @GetMapping("/byUsername/{username}")
+    public List<String> findAllPlaylistByUsername(@PathVariable String username){
+        return playlistService.findAllPlaylistByUsername(username);
+    }
 }
