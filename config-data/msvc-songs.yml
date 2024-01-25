@@ -2,8 +2,6 @@ server:
   port: 8090
 
 spring:
-  application:
-    name: msvc-songs
   datasource:
     url: jdbc:mysql://localhost:3306/Songs
     username: root
