@@ -2,10 +2,6 @@ server:
   port: 9090
 
 spring:
-  config:
-    import: optional:configserver:http://localhost:8888
-  application:
-    name: msvc-auth
   datasource:
     url: jdbc:postgresql://localhost:5432/cowradio
     username: postgres
@@ -30,4 +26,3 @@ eureka:
 logging:
   level:
     org.springframework.security: DEBUG
-
