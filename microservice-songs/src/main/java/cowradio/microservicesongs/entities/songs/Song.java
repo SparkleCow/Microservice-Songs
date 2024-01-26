@@ -24,6 +24,7 @@ public class Song{
     @Column(name = "artist_name")
     private String artistName;
     private Long views = 0L;
+    private String urlImage;
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "album_id")
@@ -32,9 +33,10 @@ public class Song{
     @Enumerated(EnumType.STRING)
     private List<Genre> genres = new ArrayList<>();
 
-    public Song(String songName, String artistName, Album album, List<Genre> genres) {
+    public Song(String songName, String artistName,String urlImage, Album album, List<Genre> genres) {
         this.songName = songName;
         this.artistName = artistName;
+        this.urlImage = urlImage;
         this.album = album;
         this.genres = genres;
     }

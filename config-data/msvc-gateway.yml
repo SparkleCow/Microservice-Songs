@@ -11,7 +11,7 @@ spring:
         - id: playlist
           uri: http://localhost:8070
           predicates:
-            - Path=/api/v1/playlist**
+            - Path=/api/v1/playlist/**
         - id: users
           uri: http://localhost:9090
           predicates:

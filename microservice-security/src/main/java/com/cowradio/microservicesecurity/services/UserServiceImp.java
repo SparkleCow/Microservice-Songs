@@ -43,7 +43,6 @@ public class UserServiceImp implements UserService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found: "+username));
         List<String> playlist = playlistClient.findAllPlaylistByUsername(username);
-        System.out.print(Arrays.toString(playlist.toArray()));
         return new AuthResponse(jwtUtils.createToken(user), playlist);
     }
 

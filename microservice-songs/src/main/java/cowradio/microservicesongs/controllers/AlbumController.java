@@ -3,7 +3,7 @@ package cowradio.microservicesongs.controllers;
 import cowradio.microservicesongs.entities.albums.Album;
 import cowradio.microservicesongs.entities.albums.AlbumRequestDto;
 import cowradio.microservicesongs.entities.albums.AlbumUpdateDto;
-import cowradio.microservicesongs.exceptions.DuplicateAlbumException;
+import cowradio.microservicesongs.exceptions.DuplicateElementException;
 import cowradio.microservicesongs.exceptions.SaveFailureException;
 import cowradio.microservicesongs.services.albumService.AlbumService;
 import jakarta.persistence.NoResultException;
@@ -25,15 +25,10 @@ public class AlbumController {
 
     @PostMapping
     public ResponseEntity<Album> createAlbum(@RequestBody @Valid AlbumRequestDto albumRequestDto)
-            throws URISyntaxException, SaveFailureException, NoResultException, DuplicateAlbumException {
+            throws URISyntaxException, SaveFailureException, NoResultException, DuplicateElementException {
         Album newAlbum = albumService.createAlbum(albumRequestDto);
-        URI uri = new URI("/api/v1/album/"+newAlbum.getId());
+        URI uri = new URI("/api/v1/album/" + newAlbum.getId());
         return ResponseEntity.created(uri).build();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Album> findAlbumById(@PathVariable Long id) throws NoResultException{
-        return ResponseEntity.ok(albumService.findById(id));
     }
 
     @GetMapping

@@ -4,7 +4,7 @@ import cowradio.microservicesongs.entities.songs.Song;
 import cowradio.microservicesongs.entities.songs.SongFeignDto;
 import cowradio.microservicesongs.entities.songs.SongRequestDto;
 import cowradio.microservicesongs.entities.songs.SongUpdateDto;
-import cowradio.microservicesongs.exceptions.DuplicateAlbumException;
+import cowradio.microservicesongs.exceptions.DuplicateElementException;
 import cowradio.microservicesongs.exceptions.SaveFailureException;
 import cowradio.microservicesongs.services.songService.SongService;
 import jakarta.persistence.NoResultException;
@@ -24,7 +24,7 @@ public class SongController {
     private final SongService songService;
 
     @PostMapping
-    public ResponseEntity<Song> createSong(@RequestBody @Valid SongRequestDto songRequestDto) throws DuplicateAlbumException, NoResultException, URISyntaxException {
+    public ResponseEntity<Song> createSong(@RequestBody @Valid SongRequestDto songRequestDto) throws DuplicateElementException, NoResultException, URISyntaxException {
         Song song = songService.createSong(songRequestDto);
         URI uri = new URI("/api/v1/song/"+song.getId());
         return ResponseEntity.created(uri).build();

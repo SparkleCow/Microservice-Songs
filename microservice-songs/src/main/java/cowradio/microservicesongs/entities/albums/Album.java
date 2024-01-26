@@ -16,7 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@ToString
 @Table(name = "albums")
 public class Album {
     @Id
@@ -44,5 +43,16 @@ public class Album {
         if(albumUpdateDto.date()!=null){
             this.date = albumUpdateDto.date();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Album{" +
+                "id=" + id +
+                ", albumName='" + albumName + '\'' +
+                ", date=" + date +
+                ", albumUrlImg='" + albumUrlImg + '\'' +
+                ", songs=" + songs +
+                '}';
     }
 }

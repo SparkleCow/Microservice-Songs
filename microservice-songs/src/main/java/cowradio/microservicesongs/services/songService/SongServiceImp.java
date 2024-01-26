@@ -6,6 +6,8 @@ import cowradio.microservicesongs.entities.songs.Song;
 import cowradio.microservicesongs.entities.songs.SongFeignDto;
 import cowradio.microservicesongs.entities.songs.SongRequestDto;
 import cowradio.microservicesongs.entities.songs.SongUpdateDto;
+import cowradio.microservicesongs.exceptions.DuplicateElementException;
+import cowradio.microservicesongs.exceptions.ResultNotFoundException;
 import cowradio.microservicesongs.exceptions.SaveFailureException;
 import cowradio.microservicesongs.repositories.AlbumRepository;
 import cowradio.microservicesongs.repositories.ArtistRepository;
@@ -26,18 +28,17 @@ public class SongServiceImp implements SongService {
 
     @Override
     public Song createSong(SongRequestDto songRequestDto) {
+        Artist artist = artistRepository.findByArtistName(songRequestDto.artistName())
+                .orElseThrow(() -> new ResultNotFoundException("Artist not found with name: "+songRequestDto.artistName()));
+        Album album = artist.getAlbums().stream().filter(a -> a.getAlbumName()
+                        .equalsIgnoreCase(songRequestDto.albumName())).findFirst()
+                .orElseThrow(() -> new ResultNotFoundException("Album not found with artist name: "+songRequestDto.artistName()+" and album name: "+songRequestDto.albumName()));
+        if(album.getSongs().stream().anyMatch(song -> song.getSongName().equalsIgnoreCase(songRequestDto.songName()))){
+            throw new DuplicateElementException("Song already exists with name: "+songRequestDto.songName()+" in album: "+album.getAlbumName()+" ", songRequestDto);
+        }
         try{
-            Artist artist = artistRepository.findByArtistName(songRequestDto.artistName())
-                    .orElseThrow(() -> new NoResultException("Artist not found with name: "+songRequestDto.artistName()));
-            if(artist.getAlbums().stream().anyMatch(album -> album.getAlbumName().equalsIgnoreCase(songRequestDto.albumName()))){
-                Album album = artist.getAlbums().stream().filter(a -> a.getAlbumName()
-                                .equalsIgnoreCase(songRequestDto.albumName())).findFirst()
-                        .orElseThrow(() -> new NoResultException("Album not found with name: "+songRequestDto.albumName()));
-
-                Song song = new Song(songRequestDto.songName(), artist.getArtistName(), album, songRequestDto.genres());
-                return songRepository.save(song);
-            }
-            throw new NoResultException("Album not found with artist name: "+songRequestDto.artistName()+" and album name: "+songRequestDto.albumName());
+            Song song = new Song(songRequestDto.songName(), artist.getArtistName(), album.getAlbumUrlImg(), album, songRequestDto.genres());
+            return songRepository.save(song);
         }catch(SaveFailureException e){
             throw new SaveFailureException(e.getMessage(), songRequestDto);
         }
@@ -45,12 +46,12 @@ public class SongServiceImp implements SongService {
 
     @Override
     public Song findById(Long id) {
-        return songRepository.findById(id).orElseThrow(() -> new NoResultException("Song not found with id: "+id));
+        return songRepository.findById(id).orElseThrow(() -> new ResultNotFoundException("Song not found with id: "+id));
     }
 
     @Override
     public SongFeignDto findByIdFeign(Long id) {
-        Song song = songRepository.findById(id).orElseThrow(() -> new NoResultException("Song not found with id: "+id));
+        Song song = songRepository.findById(id).orElseThrow(() -> new ResultNotFoundException("Song not found with id: "+id));
         return new SongFeignDto(song.getId(),
                 song.getSongName(),
                 song.getArtistName(),
@@ -86,20 +87,20 @@ public class SongServiceImp implements SongService {
 
     @Override
     public Song updateSong(Long id, SongUpdateDto songUpdateDto) {
+        Song song = songRepository.findById(id)
+                .orElseThrow(() -> new ResultNotFoundException("Song not found with id: "+id));
         try{
-            Song song = songRepository.findById(id)
-                    .orElseThrow(() -> new NoResultException("Song not found with id: "+id));
             song.update(songUpdateDto);
             return songRepository.save(song);
         }catch(SaveFailureException e){
-            throw new SaveFailureException(e.getMessage(), songUpdateDto);
+            throw new SaveFailureException("Error, song could not be updated", songUpdateDto);
         }
     }
 
     @Override
     public void deleteSong(Long id) {
         Song song = songRepository.findById(id)
-                .orElseThrow(() -> new NoResultException("Song not found with id: "+id));
+                .orElseThrow(() -> new ResultNotFoundException("Song not found with id: "+id));
         songRepository.deleteById(id);
     }
 

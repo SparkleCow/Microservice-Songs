@@ -1,15 +1,16 @@
-package cowradio.microservicesongs.controllers;
+package com.microserviceplaylist.controllers;
 
-import cowradio.microservicesongs.exceptions.DuplicateElementException;
-import cowradio.microservicesongs.exceptions.ErrorMessage;
-import cowradio.microservicesongs.exceptions.ResultNotFoundException;
-import cowradio.microservicesongs.exceptions.SaveFailureException;
+import com.microserviceplaylist.exceptions.DuplicateElementException;
+import com.microserviceplaylist.exceptions.ErrorMessage;
+import com.microserviceplaylist.exceptions.ResultNotFoundException;
+import com.microserviceplaylist.exceptions.SaveFailureException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import com.microserviceplaylist.exceptions.AuthenticationException;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
@@ -37,6 +38,12 @@ public class ControllerAdvice {
     public ResponseEntity<ErrorMessage> saveFailureExceptionHandler(SaveFailureException saveFailureException){
         ErrorMessage errorMessage = new ErrorMessage("Error 500 Internal server error", saveFailureException.getMessage());
         return new ResponseEntity<>(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(value = AuthenticationException.class)
+    public ResponseEntity<ErrorMessage> authenticationExceptionHandler(AuthenticationException authenticationException){
+        ErrorMessage errorMessage = new ErrorMessage("Error 401 Unauthorized", authenticationException.getMessage());
+        return new ResponseEntity<>(errorMessage, HttpStatus.UNAUTHORIZED);
     }
 }
 

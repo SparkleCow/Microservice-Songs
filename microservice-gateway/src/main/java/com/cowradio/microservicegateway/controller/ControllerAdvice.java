@@ -1,9 +1,9 @@
-package cowradio.microservicesongs.controllers;
+package com.cowradio.microservicegateway.controller;
 
-import cowradio.microservicesongs.exceptions.DuplicateElementException;
-import cowradio.microservicesongs.exceptions.ErrorMessage;
-import cowradio.microservicesongs.exceptions.ResultNotFoundException;
-import cowradio.microservicesongs.exceptions.SaveFailureException;
+import com.cowradio.microservicegateway.exceptions.DuplicateElementException;
+import com.cowradio.microservicegateway.exceptions.ErrorMessage;
+import com.cowradio.microservicegateway.exceptions.ResultNotFoundException;
+import com.cowradio.microservicegateway.exceptions.SaveFailureException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +28,9 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler(value = DuplicateElementException.class)
-    public ResponseEntity<ErrorMessage> duplicateElementExceptionHandler(DuplicateElementException duplicateElementException) {
+    public ResponseEntity<String> duplicateElementExceptionHandler(DuplicateElementException duplicateElementException) {
         ErrorMessage errorMessage = new ErrorMessage("Error 400 Bad request", duplicateElementException.getMessage());
-        return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorMessage+"hola entramos aca", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = SaveFailureException.class)

@@ -1,5 +1,6 @@
 package cowradio.microservicesongs.services.albumService;
 
+import cowradio.microservicesongs.entities.Genre;
 import cowradio.microservicesongs.entities.albums.Album;
 import cowradio.microservicesongs.entities.artist.Artist;
 import cowradio.microservicesongs.entities.albums.AlbumRequestDto;
@@ -13,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -38,13 +40,16 @@ class AlbumServiceImpTest {
     public void create_album(){
 
         // Given
-        AlbumRequestDto albumDto = new AlbumRequestDto(1L, new Date(), "AlbumName", "https://example.com/image.jpg");
-
-        Artist artist = new Artist(1L, "ArtistName", "Description", "https://example.com/artist", List.of(), List.of());
+        List<Album> albums = new ArrayList<>();
+        AlbumRequestDto albumDto = new AlbumRequestDto("Slowdive", new Date(), "Souvlaki", "https://example.com/image.jpg");
+        Artist artist = new Artist(1L, "Slowdive", "Description", "https://example.com/artist",
+                List.of(Genre.SHOEGAZE, Genre.ALTERNATIVE), albums);
         Album newAlbum = new Album(1L, artist, "AlbumName", new Date(), "https://example.com/image.jpg", List.of());
+        artist.getAlbums().add(newAlbum);
 
         // Mocks
-        //Mockito.when(artistRepository.findById(albumDto.artistName()).thenReturn(Optional.of(artist));
+
+        Mockito.when(artistRepository.findByArtistName("Slowdive")).thenReturn(Optional.of(artist));
         Mockito.when(albumRepository.save(any(Album.class))).thenReturn(newAlbum);
 
         // When
@@ -53,9 +58,10 @@ class AlbumServiceImpTest {
         // Then
         Assertions.assertNotNull(resultAlbum);
         Assertions.assertEquals(newAlbum, resultAlbum);
+        Assertions.assertEquals(artist, resultAlbum.getArtist());
+        Assertions.assertEquals("AlbumName", resultAlbum.getAlbumName());
 
         Mockito.verify(albumRepository, times(1)).save(any(Album.class));
-
     }
 
 }

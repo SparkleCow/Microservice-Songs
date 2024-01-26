@@ -17,7 +17,7 @@ public interface SongRepository extends JpaRepository<Song, Long> {
     @Query(value = "SELECT * FROM songs WHERE LOWER(song_name) LIKE LOWER(CONCAT('%', :name, '%'))", nativeQuery = true)
     List<Song> findBySongName(@Param("name") String name);
 
-    @Query(value = "SELECT * FROM songs AS s INNER JOIN song_genres AS sg ON s.id = sg.song_id WHERE LOWER(genres) = LIKE LOWER(CONCAT('%', :genre, '%'))", nativeQuery = true)
+    @Query(value = "SELECT * FROM songs AS s INNER JOIN song_genres AS sg ON s.id = sg.song_id WHERE LOWER(genres) LIKE LOWER(CONCAT('%', :genre, '%'))", nativeQuery = true)
     List<Song> findByGenre(@Param("genre") String genre);
 
     @Query(value = "SELECT * FROM songs WHERE LOWER(artist_name) LIKE LOWER(CONCAT('%', :artist, '%'))", nativeQuery = true)

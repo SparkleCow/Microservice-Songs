@@ -3,6 +3,8 @@ package cowradio.microservicesongs.controllers;
 import cowradio.microservicesongs.entities.artist.Artist;
 import cowradio.microservicesongs.entities.artist.ArtistRequestDto;
 import cowradio.microservicesongs.entities.artist.ArtistUpdateDto;
+import cowradio.microservicesongs.exceptions.DuplicateElementException;
+import cowradio.microservicesongs.exceptions.ResultNotFoundException;
 import cowradio.microservicesongs.exceptions.SaveFailureException;
 import cowradio.microservicesongs.services.artistService.ArtistService;
 import jakarta.persistence.NoResultException;
@@ -24,21 +26,20 @@ public class ArtistController {
 
     @PostMapping
     public ResponseEntity<Artist> createArtist(@RequestBody @Valid ArtistRequestDto artistRequestDto)
-                                               throws URISyntaxException, SaveFailureException {
-        Artist artist = artistService.createArtist(new Artist(null, artistRequestDto.artistName(), artistRequestDto.description(),
-                artistRequestDto.artistUrlImg(), artistRequestDto.genres(), List.of()));;
+                                               throws URISyntaxException, SaveFailureException, DuplicateElementException {
+        Artist artist = artistService.createArtist(artistRequestDto);
         URI uri = new URI("/api/v1/artist/"+artist.getId());
         return ResponseEntity.created(uri).build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Artist> updateArtist(@RequestBody ArtistUpdateDto artistUpdateDto,
-                                               @PathVariable Long id) throws NoResultException {
+                                               @PathVariable Long id) throws ResultNotFoundException {
         return ResponseEntity.ok(artistService.updateArtist(artistUpdateDto, id));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Artist> findArtistById(@PathVariable Long id) throws NoResultException{
+    public ResponseEntity<Artist> findArtistById(@PathVariable Long id) throws ResultNotFoundException{
         Artist artist = artistService.findById(id);
         return ResponseEntity.ok(artist);
     }
@@ -59,7 +60,7 @@ public class ArtistController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Artist> deleteArtistById(@PathVariable Long id) throws NoResultException{
+    public ResponseEntity<Artist> deleteArtistById(@PathVariable Long id) throws ResultNotFoundException{
         artistService.deleteArtist(id);
         return ResponseEntity.noContent().build();
     }

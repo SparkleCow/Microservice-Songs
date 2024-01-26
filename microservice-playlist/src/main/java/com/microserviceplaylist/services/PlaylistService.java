@@ -1,6 +1,7 @@
 package com.microserviceplaylist.services;
 
 import com.microserviceplaylist.entities.Playlist;
+import com.microserviceplaylist.entities.PlaylistUpdateDto;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
@@ -10,11 +11,9 @@ public interface PlaylistService {
     Playlist removeSongToPlaylist(Long playlistId, Long songId);
     Playlist createPlaylist(String playlistName, HttpServletRequest request);
     Playlist findById(Long id);
-    Playlist findByName(String name);
     List<Playlist> findAll();
-    List<Playlist> findByContainingName(String name);
     List<Playlist> findByUsername(String username);
-    Playlist updatePlaylist(Playlist playlist);
-    void deletePlaylist(String id);
-    List<String> findAllPlaylistByUsername(String username);
+    Playlist updatePlaylist(PlaylistUpdateDto playlistUpdateDto, Long id);
+    void deletePlaylist(Long id);
+    List<String> findByUsernameFeign(String username);
 }
