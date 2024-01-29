@@ -12,6 +12,8 @@ spring:
           uri: http://localhost:8070
           predicates:
             - Path=/api/v1/playlist/**
+          filters:
+            - AuthFilter
         - id: users
           uri: http://localhost:9090
           predicates:
