@@ -1,20 +1,24 @@
 package com.cowradio.microservicesecurity.config.jwt;
 
+import com.cowradio.microservicesecurity.entities.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class JwtUtils {
-    private final String SECRET_KEY = "6ed1eb0150e8f8fb285ec976ce500807406933985fbea5086c690eb221e53f5a";
+
+    @Value("${SECRET_KEY}")
+    private String SECRET_KEY;
 
     public boolean validateUser(UserDetails userDetails, String token) {
         return (extractUsername(token).equals(userDetails.getUsername())) && isNotExpired(token);
@@ -31,12 +35,17 @@ public class JwtUtils {
     }
 
     public String createToken(Map<String, Object> extraClaims, UserDetails userDetails){
+
+        List<String> rolesAsStrings = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority).toList();
+
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setSubject(userDetails.getUsername())
+                .claim("roles", rolesAsStrings)
                 .setExpiration(new Date(System.currentTimeMillis() + 1000*60*60*24))
-                .signWith(generateSignKey()).compact();
+                .signWith(generateSignKey(SECRET_KEY)).compact();
     }
 
     public String extractUsername(String token){
@@ -49,10 +58,10 @@ public class JwtUtils {
     }
 
     public Claims extractAllClaims(String token){
-        return Jwts.parserBuilder().setSigningKey(generateSignKey()).build().parseClaimsJws(token).getBody();
+        return Jwts.parserBuilder().setSigningKey(generateSignKey(SECRET_KEY)).build().parseClaimsJws(token).getBody();
     }
 
-    private Key generateSignKey(){
+    private Key generateSignKey(String SECRET_KEY){
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }

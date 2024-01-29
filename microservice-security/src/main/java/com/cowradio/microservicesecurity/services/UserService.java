@@ -11,13 +11,11 @@ public interface UserService {
     User createUser(UserRegisterDto user);
     AuthResponse login(String username, String password);
     TokenDto validateToken(String token);
-    User findById(int id);
+    User findById(Long id);
     User findByUsername(String username);
     List<User> findAllUser();
-    User updateUser(User user);
-    User deleteUser(User user);
+    void deleteUserById(Long id);
     void addPlaylistInUser(String username, String playlistName);
     void removePlaylistInUser(String username, String playlistName);
     void updatePlaylistInUser(String username, String playlistName, String newPlaylistName);
-
 }
