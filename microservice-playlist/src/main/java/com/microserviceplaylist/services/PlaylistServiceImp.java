@@ -1,6 +1,7 @@
 package com.microserviceplaylist.services;
 
 import com.microserviceplaylist.client.SongClient;
+import com.microserviceplaylist.client.UserClient;
 import com.microserviceplaylist.entities.Playlist;
 import com.microserviceplaylist.entities.PlaylistUpdateDto;
 import com.microserviceplaylist.entities.Song;
@@ -26,6 +27,7 @@ public class PlaylistServiceImp implements PlaylistService{
     private final JwtUtils jwtUtils;
     private final SongClient songService;
     private final SongRepository songRepository;
+    private final UserClient userClient;
 
     @Override
     public Playlist addSongToPlaylist(Long playlistId, Long songId) {
@@ -33,7 +35,7 @@ public class PlaylistServiceImp implements PlaylistService{
                 .orElseThrow(()-> new ResultNotFoundException("Playlist not found with id: "+playlistId));
 
         if(playlist.getSongs().stream().anyMatch(a -> a.getId().equals(songId)))
-            throw new DuplicateElementException("Song already exists in playlist", playlist);
+            throw new DuplicateElementException("Song already exists in playlist ", playlist);
 
         Optional<Song> songOpt = songRepository.findById(songId);
         if(songOpt.isPresent()){
@@ -51,7 +53,7 @@ public class PlaylistServiceImp implements PlaylistService{
         try {
             return playlistRepository.save(playlist);
         }catch (RuntimeException e){
-            throw new SaveFailureException("Playlist could not be saved", playlist);
+            throw new SaveFailureException("Playlist could not be saved ", playlist);
         }
     }
 
@@ -67,7 +69,7 @@ public class PlaylistServiceImp implements PlaylistService{
         try {
             return playlistRepository.save(playlist);
         }catch (RuntimeException e){
-            throw new SaveFailureException("Playlist could not be saved", playlist);
+            throw new SaveFailureException("Playlist could not be saved ", playlist);
         }
     }
 
@@ -76,12 +78,16 @@ public class PlaylistServiceImp implements PlaylistService{
         String token = request.getHeader("Authorization");
         if(token==null || !token.startsWith("Bearer"))
             throw new AuthenticationException("Invalid credentials");
+
+        //Token nulo o valido TODO
+
         token = token.substring(7);
         Playlist playlist = new Playlist(null, name, jwtUtils.extractUsername(token), List.of());
         try{
+            userClient.addPlaylistInformation(playlist.getUsername(), playlist.getName());
             return playlistRepository.save(playlist);
         }catch (RuntimeException e){
-            throw new SaveFailureException("Playlist could not be saved", playlist);
+            throw new SaveFailureException("Playlist could not be saved ", playlist);
         }
     }
 
@@ -105,8 +111,10 @@ public class PlaylistServiceImp implements PlaylistService{
     public Playlist updatePlaylist(PlaylistUpdateDto playlistUpdateDto, Long id) {
         Playlist playlist = playlistRepository.findById(id)
                 .orElseThrow(()-> new ResultNotFoundException("Playlist not found with id: "+id));
+        String playlistName = playlist.getName();
         playlist.setName(playlistUpdateDto.name());
         try{
+            userClient.updatePlaylistInformation(playlist.getUsername(), playlistName, playlist.getName());
             return playlistRepository.save(playlist);
         }catch (RuntimeException e){
             throw new SaveFailureException("Playlist could not be saved", playlist);
@@ -117,6 +125,7 @@ public class PlaylistServiceImp implements PlaylistService{
     public void deletePlaylist(Long id) {
         Playlist playlist = playlistRepository.findById(id)
                 .orElseThrow(()-> new ResultNotFoundException("Playlist not found with id: "+id));
+        userClient.removePlaylistInformation(playlist.getUsername(), playlist.getName());
         playlistRepository.deleteById(id);
     }
 

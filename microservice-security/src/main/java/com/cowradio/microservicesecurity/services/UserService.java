@@ -16,4 +16,8 @@ public interface UserService {
     List<User> findAllUser();
     User updateUser(User user);
     User deleteUser(User user);
+    void addPlaylistInUser(String username, String playlistName);
+    void removePlaylistInUser(String username, String playlistName);
+    void updatePlaylistInUser(String username, String playlistName, String newPlaylistName);
+
 }

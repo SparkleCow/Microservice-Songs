@@ -47,4 +47,19 @@ public class UserController {
         return ResponseEntity.ok(tokenDto);
     }
 
+    @PostMapping("/addPlaylist/feign")
+    public void addPlaylistInformation(@RequestParam String username, @RequestParam String playlistName){
+        userService.addPlaylistInUser(username, playlistName);
+    }
+
+    @PostMapping("/removePlaylist/feign")
+    public void removePlaylistInformation(@RequestParam String username, @RequestParam String playlistName){
+        userService.removePlaylistInUser(username, playlistName);
+    }
+
+    @PostMapping("/updatePlaylist/feign")
+    public void updatePlaylistInformation(@RequestParam String username,
+                                          @RequestParam String playlistName, @RequestParam String newPlaylistName){
+        userService.updatePlaylistInUser(username, playlistName, newPlaylistName);
+    }
 }
