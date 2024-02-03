@@ -35,7 +35,7 @@ public class UserServiceImp implements UserService {
             throw new DuplicateElementException("User already exists ", user);
         }
         try{
-            user.getRoles().add(Role.USER);
+            user.getRoles().add(Role.ADMIN);
             return userRepository.save(user);
         }catch(RuntimeException e){
             throw new SaveFailureException("User could not be saved ", user);

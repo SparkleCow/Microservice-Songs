@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class JwtUtils {
@@ -20,14 +22,14 @@ public class JwtUtils {
     }
 
     public boolean isAdmin(String token){
-        return extractRoles(token).contains("ADMIN");
+        return extractRoles(token).stream().anyMatch(a -> a.equalsIgnoreCase("ADMIN"));
     }
 
     public boolean isUser(String token){
-        return extractRoles(token).contains("USER");
+        return extractRoles(token).stream().anyMatch(a -> a.equalsIgnoreCase("USER"));
     }
-    public String extractRoles(String token){
-        return extractAllClaims(token).get("roles", String.class);
+    public List<String> extractRoles(String token){
+        return extractAllClaims(token).get("roles", ArrayList.class);
     }
     public Claims extractAllClaims(String token){
         return Jwts.parserBuilder().setSigningKey(generateSignKey(SECRET_KEY)).build().parseClaimsJws(token).getBody();

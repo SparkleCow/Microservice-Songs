@@ -23,7 +23,7 @@ public class AlbumController {
 
     private final AlbumService albumService;
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Album> createAlbum(@RequestBody @Valid AlbumRequestDto albumRequestDto)
             throws URISyntaxException, SaveFailureException, NoResultException, DuplicateElementException {
         Album newAlbum = albumService.createAlbum(albumRequestDto);
@@ -31,11 +31,15 @@ public class AlbumController {
         return ResponseEntity.created(uri).build();
     }
 
-    @GetMapping
+    @GetMapping("/findAll")
     public ResponseEntity<List<Album>> findAllAlbum(){
         return ResponseEntity.ok(albumService.findAllAlbums());
     }
 
+    @GetMapping("/findById/{id}")
+    public ResponseEntity<Album> findAlbumById(@PathVariable Long id){
+        return ResponseEntity.ok(albumService.findById(id));
+    }
     @GetMapping("/byName")
     public ResponseEntity<List<Album>> findAlbumByName(@RequestParam String name){
         return ResponseEntity.ok(albumService.findByAlbumName(name));
@@ -46,13 +50,13 @@ public class AlbumController {
         return ResponseEntity.ok(albumService.findByArtist(name));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Album> updateAlbumById(@PathVariable Long id, @RequestBody AlbumUpdateDto albumUpdateDto)
             throws NoResultException, SaveFailureException {
         return ResponseEntity.ok(albumService.updateAlbum(id, albumUpdateDto));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteById/{id}")
     public ResponseEntity<Album> deleteAlbumById(@PathVariable Long id) throws NoResultException{
         albumService.deleteAlbum(id);
         return ResponseEntity.noContent().build();

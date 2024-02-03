@@ -2,7 +2,6 @@ package com.cowradio.microservicegateway.config.filter;
 
 import com.cowradio.microservicegateway.config.jwt.JwtUtils;
 import com.cowradio.microservicegateway.dtos.TokenDto;
-import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpStatus;
@@ -28,6 +27,10 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
+            System.out.println("Es usuario " +routerValidator.isUserSecure.test(exchange.getRequest()));
+            System.out.println("Es abierto seguro? " +!routerValidator.isSecure.test(exchange.getRequest()));
+            System.out.println("Es admin " +routerValidator.isAdminSecure.test(exchange.getRequest()));
+
             String path = exchange.getRequest().getPath().toString();
             if (!routerValidator.isSecure.test(exchange.getRequest())) {
                 return chain.filter(exchange);
@@ -35,11 +38,12 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
             if(!exchange.getRequest().getHeaders().containsKey("Authorization")){
                 return onError(exchange, HttpStatus.UNAUTHORIZED);
             }
-            if(routerValidator.isUserSecure.test(exchange.getRequest()){
+            if(routerValidator.isUserSecure.test(exchange.getRequest())){
                 String token = exchange.getRequest().getHeaders().get("Authorization").get(0);
                 if(token == null || !token.startsWith("Bearer")){
-                    return onError(exchange, HttpStatus.UNAUTHORIZED);
+                    return onError(exchange, HttpStatus.BAD_REQUEST);
                 }
+                System.out.println(jwtUtils.isUser(token.substring(7)));
                 if(jwtUtils.isUser(token.substring(7))){
                     return webClient.build()
                             .post()
@@ -52,7 +56,7 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
                             }).flatMap(chain::filter);
                 }
             }
-            if(routerValidator.isAdminSecure.test(exchange.getRequest()){
+            if(routerValidator.isAdminSecure.test(exchange.getRequest())){
                 String token = exchange.getRequest().getHeaders().get("Authorization").get(0);
                 if(token == null || !token.startsWith("Bearer")){
                     return onError(exchange, HttpStatus.UNAUTHORIZED);
@@ -69,6 +73,7 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
                             }).flatMap(chain::filter);
                 }
             }
+            return onError(exchange, HttpStatus.UNAUTHORIZED);
         };
     }
 

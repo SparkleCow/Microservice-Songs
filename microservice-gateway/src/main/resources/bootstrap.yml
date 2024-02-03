@@ -5,3 +5,13 @@ spring:
     config:
       enabled: true
       uri: http://localhost:8888
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /doc/swagger-ui.html
+  packages-to-scan:
+  paths-to-match:
+    - /api/v1/**

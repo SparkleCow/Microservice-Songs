@@ -28,6 +28,7 @@ public class User implements UserDetails {
     private String email;
     private String password;
     @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
     @ElementCollection
     private List<String> playlists = new ArrayList<>();

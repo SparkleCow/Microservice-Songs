@@ -21,7 +21,7 @@ public class PlaylistController {
 
     private final PlaylistService playlistService;
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Playlist> createPlaylist(@RequestParam String playlistName, HttpServletRequest request)
             throws DuplicateElementException,
             AuthenticationException,
@@ -30,7 +30,7 @@ public class PlaylistController {
         return ResponseEntity.ok(playlistService.createPlaylist(playlistName, request));
     }
 
-    @PostMapping("/addSong/")
+    @PostMapping("/addSong")
     public ResponseEntity<Playlist> addSongToPlaylist(@RequestParam Long playlistId, @RequestParam Long songId)
             throws DuplicateElementException,
             ResultNotFoundException,
@@ -39,7 +39,7 @@ public class PlaylistController {
         return ResponseEntity.ok(playlistService.addSongToPlaylist(playlistId, songId));
     }
 
-    @DeleteMapping("/removeSong/")
+    @DeleteMapping("/removeSong")
     public ResponseEntity<Playlist> removeSongToPlaylist(@RequestParam Long playlistId, @RequestParam Long songId)
             throws ResultNotFoundException,
             SaveFailureException
@@ -47,7 +47,7 @@ public class PlaylistController {
         return ResponseEntity.ok(playlistService.removeSongToPlaylist(playlistId, songId));
     }
 
-    @GetMapping
+    @GetMapping("/findAll")
     public ResponseEntity<List<Playlist>> findAllPlaylist(){
         return ResponseEntity.ok(playlistService.findAll());
     }
@@ -67,7 +67,7 @@ public class PlaylistController {
         return playlistService.findByUsername(username);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Playlist> updatePlaylist(@RequestBody PlaylistUpdateDto playlistUpdateDto, @PathVariable Long id)
             throws ResultNotFoundException,
             SaveFailureException
@@ -75,7 +75,7 @@ public class PlaylistController {
         return ResponseEntity.ok(playlistService.updatePlaylist(playlistUpdateDto, id));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteById/{id}")
     public ResponseEntity<Void> deletePlaylistById(@PathVariable Long id) throws ResultNotFoundException{
         playlistService.deletePlaylist(id);
         return ResponseEntity.noContent().build();

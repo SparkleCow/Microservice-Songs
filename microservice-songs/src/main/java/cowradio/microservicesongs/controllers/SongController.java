@@ -23,19 +23,19 @@ public class SongController {
 
     private final SongService songService;
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Song> createSong(@RequestBody @Valid SongRequestDto songRequestDto) throws DuplicateElementException, NoResultException, URISyntaxException {
         Song song = songService.createSong(songRequestDto);
         URI uri = new URI("/api/v1/song/"+song.getId());
         return ResponseEntity.created(uri).build();
     }
 
-    @GetMapping
+    @GetMapping("/findAll")
     public ResponseEntity<List<Song>> findAllSongs(){
         return ResponseEntity.ok(songService.findAllSongs());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/findById/{id}")
     public ResponseEntity<Song> findSongById(@PathVariable Long id) throws NoResultException{
         return ResponseEntity.ok(songService.findById(id));
     }
@@ -64,12 +64,12 @@ public class SongController {
         return ResponseEntity.ok(songService.findByAlbum(album));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Song> updateSong(@PathVariable Long id, @RequestBody SongUpdateDto songUpdateDto) throws NoResultException, SaveFailureException {
         return ResponseEntity.ok(songService.updateSong(id, songUpdateDto));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteById/{id}")
     public ResponseEntity<Void> deleteSong(@PathVariable Long id) throws NoResultException{
         songService.deleteSong(id);
         return ResponseEntity.noContent().build();

@@ -72,12 +72,12 @@ public class UserController {
         userService.addPlaylistInUser(username, playlistName);
     }
 
-    @PostMapping("/removePlaylist/feign")
+    @DeleteMapping("/removePlaylist/feign")
     public void removePlaylistInformation(@RequestParam String username, @RequestParam String playlistName){
         userService.removePlaylistInUser(username, playlistName);
     }
 
-    @PostMapping("/updatePlaylist/feign")
+    @PutMapping("/updatePlaylist/feign")
     public void updatePlaylistInformation(@RequestParam String username,
                                           @RequestParam String playlistName, @RequestParam String newPlaylistName){
         userService.updatePlaylistInUser(username, playlistName, newPlaylistName);
